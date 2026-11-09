@@ -35,7 +35,7 @@ You are still responsible for the result. You must be able to read, test and exp
 | --- | --- | --- |
 | A | **Timing log:** log how long each model turn and each tool call takes, to stderr. | where to measure; leaving stdout unchanged; testing log output |
 | B | **Tool filter:** an optional `tools:` list per MCP server (`allow: [date]`), so only some of a server's tools are offered to the model. | config validation (an unknown tool name in `allow` is a startup error); filtering by the name before or after adding the `<server>__` prefix |
-| C | **History limit:** an optional `max_history_messages`. Before each model call, drop the oldest messages so the history fits. | an assistant message with tool calls must never be split from its tool results, or the API rejects the request; the first message must stay a user message |
+| C | **History limit:** an optional `max_history_messages`. Before each model call, drop the oldest messages so the history fits. | an assistant message with tool calls must never be split from its tool results; the first message must stay a user message. The OpenAI and Anthropic APIs reject a broken history, but llama-server accepts it silently, so with a local model only your tests will catch the bug |
 
 Level C touches a design decision the spec explicitly leaves out ("context compaction"). Part of the task is arguing in the spec why your limited version is acceptable.
 

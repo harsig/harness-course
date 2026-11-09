@@ -78,7 +78,8 @@ Three times, three kinds of connection. Mixing them up is the most common source
 1. With `ref: main`, what could change between two `--setup` runs without any change to your config? Compare a tag, a branch and a commit as `ref`.
 2. Why is it useful that a normal run never fetches, even though fetching would keep things "up to date"?
 3. Most YAML loaders ignore unknown keys. What would mistake 1 have done in such a loader? How long might it take to notice?
-4. Which of these do you already use: lock files (`go.sum`, `package-lock.json`), pinned CI actions, pinned model versions in API calls? Why does pinning matter even more when a model is part of the system?
+4. After step 2, `find` shows more than one clone folder for the same repository. Setup doesn't delete old clones. What does that cost, and what could go wrong if setup deleted them automatically?
+5. Which of these do you already use: lock files (`go.sum`, `package-lock.json`), pinned CI actions, pinned model versions in API calls? Why does pinning matter even more when a model is part of the system?
 
 ## In your daily work
 

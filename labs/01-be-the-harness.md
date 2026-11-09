@@ -22,11 +22,11 @@
 
 ## 1. Turn one: offer a tool
 
-Create `turn1.json`. It holds a system prompt, the user's message and one tool definition, the same one that `scripts-mcp` builds from the header of `date.sh`:
+Create `turn1.json`. Set `"model"` to the name your server lists under `curl -s http://localhost:8080/v1/models`. It holds a system prompt, the user's message and one tool definition, the same one that `scripts-mcp` builds from the header of `date.sh`:
 
 ```json
 {
-  "model": "any",
+  "model": "Qwen3.8-27B-S",
   "messages": [
     {"role": "system", "content": "You have no clock. Use tools for anything about the current time."},
     {"role": "user", "content": "What time is it in Tokyo?"}
@@ -108,7 +108,7 @@ For each change, **predict first**, then send it:
 
 1. Remove the `tools` array from `turn1.json`. What does the model answer, and is the answer right?
 2. In `turn2.json`, replace the tool result with a wrong time (`2020-01-01T03:00:00+09:00`). What does the model say?
-3. Send `turn2.json` with a wrong `tool_call_id`. What happens? Imagine a turn with two tool calls: why must the ids match?
+3. Send `turn2.json` with a wrong `tool_call_id`. What happens? (llama-server accepts it silently; the OpenAI and Anthropic APIs reject it.) Imagine a reply with two tool calls: why would a strict API insist that the ids match, and what could go wrong with a server that doesn't check?
 
 ## Check
 

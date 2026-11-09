@@ -70,6 +70,8 @@ Now ask the **main** agent the same question. The sub-agent fails inside it. Wha
 
 > **Predict:** What is the smallest `max_iterations` that works? Then try 2 and 3.
 
+Look at the stderr lines for `max_iterations: 1`: both tools were called, but the run still failed. One model reply can ask for **several tools at once**, and one iteration runs all of them. Use this to explain the smallest value that works.
+
 Restore the file: `git restore sub-agent/plain-harness.yml`.
 
 ## 4. Break it: a failing tool
@@ -112,7 +114,7 @@ Add one line to `Agent.Run` that logs the iteration number and the size of the h
 plain-harness: iteration 2, 5 messages
 ```
 
-Build (`./build.sh`). Run the main agent with **one session** for three questions in a row. Then run the tests (`cd src && go test ./...`), and restore your change or keep it on a branch.
+Build (`./build.sh`). Run the main agent with **one session** for three questions in a row. The sub-agent uses the same binary, so its lines show up too. You can recognize them: they always start again at 1 message. Why? Then run the tests (`cd src && go test ./...`), and restore your change or keep it on a branch.
 
 ## The idea, continued: sessions are the history on disk
 
@@ -123,7 +125,7 @@ With `--session demo`, the harness saves the history to `sessions/demo.json` and
 - **saved even on error**: a failed run can be continued
 - **no compaction** (out of scope in `spec.md`): the session grows until it no longer fits the model's context window, and then the run fails
 
-**What production harnesses add.** Commercial agents deal with this growth in three ways. **Compaction** summarizes or drops old turns when the context fills up. **Prompt caching** lets the provider reuse the unchanged start of the request, so resending it costs less and goes faster. But it is still sent, and it still takes up the context window. **Parallel tool calls** run several tools from one reply at the same time. `plain-harness` leaves all three out, so you can see the plain mechanism.
+**What production harnesses add.** Commercial agents deal with this growth in three ways. **Compaction** summarizes or drops old turns when the context fills up. **Prompt caching** lets the provider reuse the unchanged start of the request, so resending it costs less and goes faster. But it is still sent, and it still takes up the context window. **Parallel execution** runs the several tool calls of one reply at the same time. `plain-harness` accepts several calls per reply but runs them one after another, and it leaves out compaction and caching, so you can see the plain mechanism.
 
 ## Check
 
