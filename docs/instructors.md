@@ -34,7 +34,7 @@ The design follows a small set of principles with strong evidence from cognitive
 | **Prediction before observation** | a written prediction with a confidence rating before every experiment | surprise, a prediction error, drives learning (Brod, Hasselhorn & Bunge, 2018); in the brain, dopamine signals prediction errors (Schultz, Dayan & Montague, 1997); curiosity improves memory, through the hippocampus (Gruber, Gelman & Ranganath, 2014) |
 | **Experience before explanation** | "The idea" comes after Run and Investigate. Two exceptions: in Lab 5 it comes before the experiment, because students have seen the +5 answer since Lab 0; Lab 9 is a project and starts from the idea | Schwartz & Bransford, 1998 ("A time for telling"); productive failure (Kapur, 2016) |
 | **PRIMM for programming** | Predict → Run → Investigate → Modify → Make is the lab rhythm, with Make steps in Labs 3, 4, 5, 8 and 9; students tell each other their predictions | Sentance, Waite & Kallia, 2019. PRIMM was studied with pupils aged 11–14 and builds on talk between learners; using it with university students is an adaptation, so have students predict in pairs where you can |
-| **A notional machine** | the *context ledger*: one simple, accurate model of what the model sees, drawn in Labs 1, 2, 5, 6, 7, 9 | du Boulay, 1986; Sorva, 2013 |
+| **A notional machine** | the *context ledger*: one simple, accurate model of what the model sees, drawn in Labs 1, 2, 5, 6, 7, 9, 10 | du Boulay, 1986; Sorva, 2013 |
 | **Worked examples, then fading** | Lab 1 does everything by hand with exact JSON; Lab 4 goes from an annotated example, to a template with gaps, to a tool of the students' own design | Sweller, van Merriënboer & Paas, 2019; Renkl & Atkinson, 2003 |
 | **Managing cognitive load** | the same lab template every time; Lab 0 runs one agent before showing two; the explanation sits next to the code instead of in a separate document | Sweller et al., 2019 (split attention); expertise reversal: reduce guidance as skill grows (Kalyuga et al., 2003) |
 | **Conceptual change** | students draw their current model in Lab 0 and redraw it in Lab 6; misconceptions are named in Labs 1–9 and tested against the system | Chi, 2008; self-explanation (Chi et al., 1994) |
@@ -44,7 +44,7 @@ The design follows a small set of principles with strong evidence from cognitive
 
 ## Workload and prerequisites
 
-- **Workload.** The labs take about 13–15 hours. With the lab logs, the Lab 5 report and the reflection, plan about 30 hours per student. That is roughly 1 ECTS credit, so the course fits as one part of a larger module, or as a short elective.
+- **Workload.** The labs take about 14–16 hours. With the lab logs, the Lab 5 report and the reflection, plan about 30 hours per student. That is roughly 1 ECTS credit, so the course fits as one part of a larger module, or as a short elective.
 - **Prerequisites.** One completed programming course, basic use of a shell and git, and reading JSON and YAML. No Go and no machine learning are required.
 - **Group work.** Predictions and experiments work well in pairs. Lab logs, the Lab 9 spec and the walk-through are individual.
 
@@ -54,13 +54,13 @@ The design follows a small set of principles with strong evidence from cognitive
 
 | Week | Session | Self-study |
 | --- | --- | --- |
-| 1 | Lab 0 together, incl. the drawing; start Lab 1 | finish Lab 1 |
+| 1 | Concept quiz (first run); Lab 0 together, incl. the drawing; start Lab 1 | finish Lab 1 |
 | 2 | Discuss Lab 1 ledgers; Lab 2 | Lab 3 |
 | 3 | Warm-up as a class quiz; Lab 4 started in class | finish Lab 4 |
 | 4 | Experiment design; Lab 5, with results pooled across the group | Lab 5 report |
 | 5 | Lab 6, incl. the redraw; discuss the drawings | Lab 7 |
 | 6 | Discuss Lab 7 counts; Lab 8 | start Lab 9 |
-| 7 | Lab 9 walk-throughs, reflection | final report |
+| 7 | Concept quiz (second run); Lab 9 walk-throughs | Lab 10, reflection, final report |
 
 **Block week** (5 days): one day each for Labs 0–2, 3–4, 5–6, 7–8, and 9 with presentations. Start each day with a 10-minute mixed quiz on the days before.
 
@@ -75,7 +75,13 @@ A portfolio works well: the lab logs plus Lab 9.
 | Lab logs 0–8 | 40 % | predictions, ledgers, Check answers, with commands and outputs. For Lab 5 only the log counts here; its experiment is graded in the report |
 | Lab 5 experiment report | 20 % | method, table, interpretation, limitations |
 | Lab 9 feature | 30 % | spec diff, code, tests, review notes, and a 5-minute live walk-through |
-| Reflection | 10 % | 1–2 pages: the Lab 0/Lab 6 drawings compared, and how the course changed the way they use AI tools |
+| Reflection | 10 % | 1–2 pages: the three drawings (Labs 0, 6, 10) compared, and how the course changed the way they use AI tools |
+
+**Concept quiz, before and after.** [concept-quiz.md](concept-quiz.md) has twelve multiple-choice questions, one per idea; the wrong options are the misconceptions from [concepts.md](concepts.md). Give it ungraded in the first session and again after Lab 9, and compare the counts per option. It shows students their progress, and it shows you which misconceptions survived the course.
+
+**Final review.** [Lab 10](../labs/10-review.md) is a mixed recall of all labs with answers, a third drawing, and a transfer task on a real AI tool. Its transfer task is a good basis for the reflection.
+
+**Answer key.** Keep a key for the Check questions and the quiz outside this public repository, and give feedback on the first two lab logs early, so that mistakes in method don't repeat for the whole course.
 
 **Grade predictions for being made, not for being right.** A wrong prediction that is honestly explained is worth as much as a correct one. Otherwise students will fill in the prediction after the run.
 

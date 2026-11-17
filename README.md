@@ -38,8 +38,9 @@ Start with [How the labs work](labs/README.md) (5 minutes).
 | [7 Untrusted output](labs/07-untrusted-output.md) | trigger prompt injection; tell real boundaries from rules | 60 min |
 | [8 Pin and set up](labs/08-reproducibility.md) | pinned versions, setup vs. run, strict config; pin your own agent | 60 min |
 | [9 Build with AI](labs/09-spec-driven-feature.md) | extend the harness with an AI assistant, spec first | 2–4 h |
+| [10 Review and transfer](labs/10-review.md) | recall the mechanisms from memory; draw your model a third time; explain a real AI tool | 60 min |
 
-Reference: [the mental model on one page](docs/concepts.md) (for review), [architecture](docs/architecture.md), [glossary](docs/glossary.md).
+Reference: [the mental model on one page](docs/concepts.md) (for review), a [concept quiz](docs/concept-quiz.md) to take before and after the course, [architecture](docs/architecture.md), [glossary](docs/glossary.md).
 
 ## The system you will take apart
 
