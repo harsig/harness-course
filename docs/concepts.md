@@ -42,6 +42,8 @@ The model knows exactly what is in this box, and nothing else.
 | "A skill that is loaded is followed." | Loaded and followed are separate steps, and both can fail. | Lab 5 |
 | "The sub-agent knows the context." | It sees one string. | Lab 6 |
 | "A good system prompt stops prompt injection." | It lowers the odds; only enforced limits are boundaries. | Lab 7 |
+| "I didn't change anything, so nothing changed." | A branch ref, an unpinned model or a `latest` image can change under you. | Lab 8 |
+| "The tests pass, so the AI's code is right." | Tests the AI wrote check what the AI understood, not what the spec says. | Lab 9 |
 
 ## You observe → mechanism
 

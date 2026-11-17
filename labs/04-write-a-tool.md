@@ -3,7 +3,7 @@
 | | |
 | --- | --- |
 | **You will be able to** | write a tool that a model uses correctly, build an agent from the parts, and measure how much a description changes its behavior |
-| **Time** | 90 min |
+| **Time** | 120 min |
 
 ## Warm-up (from memory)
 
@@ -162,14 +162,24 @@ Add a `format` parameter, first as a free `string` with the description "oneline
 
 - **The description is a prompt.** The model picks tools by reading their descriptions. Compare the plain `date` description with `date_agent` in `plain-harness-config/main-agent/scripts/date-agent.sh`, which says "ALWAYS use this tool whenever…". That description is written to change behavior, not just to document.
 - **The schema is a contract, but the model can break it.** Models send wrong types, unknown fields or broken JSON. `scripts-mcp` checks every call *before* it starts the script and returns a readable error. Constraints like `enum` turn a vague instruction into a check that always runs.
+- **Arguments travel as environment variables** (`PARAM_*`), not on a command line. A value the model chose can then never be read as an option or as shell syntax, and no quoting is needed.
 - **The result is text, too.** Whatever the tool prints goes into the model's context. It is cut at `max_output_bytes`, because a tool that prints a megabyte would fill the context window.
 - **Names are namespaced** as `<server>__<tool>` (e.g. `tools__repo_log`), so two servers can both offer a tool called `search`.
 
 > **Misconception:** "The model picked the wrong tool because it's dumb." Usually it picked the best match for what it could read: a name, a description and a schema.
 
+## 6. Make: a tool of your own
+
+Now without a template. Design one more tool for `~/my-agent` that answers a question you actually have about a repository or a folder (for example: which files changed most often, how many lines per file type, what the open TODO comments say).
+
+1. Write the header first: name, description, parameters with types, and `enum` or `required` where they help. Use what you measured in steps 4 and 5.
+2. Write the script. Give it at least one error path with a message that tells the model what to do next.
+3. Test it without a model (`PARAM_…=… ./scripts/<name>.sh`), then add it to `scripts-mcp.yml`.
+4. Write three questions that should use it and two that shouldn't. Run each twice and record the results as in step 4.
+
 ## Check
 
-1. Show your results table from step 4. Which differences are larger than the differences between repeated runs of the same variant?
+1. Show your results tables from steps 4 and 6. Which differences are larger than the differences between repeated runs of the same variant?
 2. Why are arguments passed as `PARAM_*` environment variables and not as command-line arguments? Give a `repo` value that would be dangerous if the script built a shell command line from it.
 3. Write three rules for tool descriptions, based on **your measurements**. Then compare them with a published tool-design guide (for example Anthropic's "Writing effective tools for agents"). Which rule did you find that the guide doesn't mention, or the other way round?
 

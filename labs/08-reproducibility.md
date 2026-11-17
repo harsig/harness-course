@@ -3,7 +3,7 @@
 | | |
 | --- | --- |
 | **You will be able to** | explain why setup (network, changes) is kept apart from run (no network, repeatable), and why strict config pays off |
-| **Time** | 45 min |
+| **Time** | 60 min |
 
 ## Warm-up (from memory)
 
@@ -74,13 +74,25 @@ Three times, three kinds of connection. Mixing them up is the most common source
 - **The clone folder name contains a hash of URL and `ref`.** Changing a `ref` makes the old clone invalid, so you can't run against an outdated version by accident.
 - **Unknown keys are errors** (`harness-kit/yamlconfig`), in all three tools. A typo shows up at startup, not weeks later. What a config check can't see (mistake 5: is a server really listening there?) only shows up at run time, after the retries.
 
+> **Misconception:** "I didn't change anything, so nothing changed." A branch as `ref`, a model without a fixed version or an image tag like `latest` can all change under you.
+
+## 4. Make: pin your own agent
+
+Make `~/my-agent` reproducible for someone else.
+
+1. Put it under git. Ignore what setup and runs create (`.plain-harness/`, `.scripts-mcp/`, `.skills-mcp/`, sessions).
+2. Replace the absolute path to `scripts-mcp` with a `git:` source at a tag, plus `setup` steps that build it. `sub-agent/plain-harness.yml` shows the pattern.
+3. Run `--setup`, then a normal run. Then move the folder somewhere else and check that both still work.
+4. Write a short `README.md`: the setup command, and the exact model, quantization and server version you tested with.
+
 ## Check
 
 1. With `ref: main`, what could change between two `--setup` runs without any change to your config? Compare a tag, a branch and a commit as `ref`.
 2. Why is it useful that a normal run never fetches, even though fetching would keep things "up to date"?
 3. Most YAML loaders ignore unknown keys. What would mistake 1 have done in such a loader? How long might it take to notice?
 4. After step 2, `find` shows more than one clone folder for the same repository. Setup doesn't delete old clones. What does that cost, and what could go wrong if setup deleted them automatically?
-5. Which of these do you already use: lock files (`go.sum`, `package-lock.json`), pinned CI actions, pinned model versions in API calls? Why does pinning matter even more when a model is part of the system?
+5. What in your pinned `~/my-agent` is still *not* pinned? Name at least two things.
+6. Which of these do you already use: lock files (`go.sum`, `package-lock.json`), pinned CI actions, pinned model versions in API calls? Why does pinning matter even more when a model is part of the system?
 
 ## In your daily work
 

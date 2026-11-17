@@ -20,9 +20,9 @@
 
 </details>
 
-## 1. Turn one: offer a tool
+## 1. Call one: offer a tool
 
-Create `turn1.json`. Set `"model"` to the name your server lists under `curl -s http://localhost:8080/v1/models`. It holds a system prompt, the user's message and one tool definition, the same one that `scripts-mcp` builds from the header of `date.sh`:
+Create `call1.json`. Set `"model"` to the name your server lists under `curl -s http://localhost:8080/v1/models`. It holds a system prompt, the user's message and one tool definition, the same one that `scripts-mcp` builds from the header of `date.sh`:
 
 ```json
 {
@@ -52,7 +52,7 @@ Create `turn1.json`. Set `"model"` to the name your server lists under `curl -s 
 
 ```sh
 curl -s http://localhost:8080/v1/chat/completions -H 'Content-Type: application/json' \
-  -d @turn1.json | jq '.choices[0].message'
+  -d @call1.json | jq '.choices[0].message'
 ```
 
 (Hosted OpenAI-compatible API: use your provider's URL and add `-H "Authorization: Bearer $YOUR_API_KEY"`. The Anthropic API uses a different request format; see the note in Lab 0.)
@@ -67,16 +67,18 @@ You are the harness now. The model can't run anything, so you do it. Run the scr
 PARAM_TIMEZONE=Asia/Tokyo PARAM_FORMAT=iso $WS/scripts/date.sh
 ```
 
-## 3. Turn two: send the result back
+## 3. Call two: send the result back
 
-Copy `turn1.json` to `turn2.json` and add two messages at the end of `messages`: first the assistant message **exactly as you received it**, then the tool result:
+Copy `call1.json` to `call2.json` and add two messages at the end of `messages`: first the assistant message **exactly as you received it**, then the tool result:
 
 ```json
     {"role": "assistant", "content": null, "tool_calls": [ <the tool_calls array from step 1> ]},
     {"role": "tool", "tool_call_id": "<the id from that tool call>", "content": "<output of date.sh>"}
 ```
 
-Send `turn2.json`. Now the model answers in text. The reply has no tool calls, so a harness would stop here.
+The `tool_call_id` ties the result to its request. One reply can contain several tool calls, and the model must be able to tell which result belongs to which call.
+
+Send `call2.json`. Now the model answers in text. The reply has no tool calls, so a harness would stop here.
 
 **Draw the ledger** (see [How the labs work](README.md#the-context-ledger)) for the second call: system, tools, and the four messages.
 
@@ -88,7 +90,7 @@ Send `turn2.json`. Now the model answers in text. The reply has no tool calls, s
 reply = model(system_prompt, messages[], tool_definitions[])
 ```
 
-Nothing is kept between calls. In turn 2 the model "remembered" your question only because **you sent it again**. The model has no clock, no files and can't run commands. All it can do is produce text, and part of that text may be a structured request to call a tool.
+Nothing is kept between calls. In the second call the model "remembered" your question only because **you sent it again**. The model has no clock, no files and can't run commands. All it can do is produce text, and part of that text may be a structured request to call a tool.
 
 **A harness is everything around the model.** The harness is the program that turns this function into an agent. It builds the system prompt, tells the model which tools exist, runs the tools the model asks for, keeps the history, handles errors and limits, and decides what the tools may do. You just did all of that by hand. In `plain-harness`, the whole interface to a model is one method (`src/types.go`):
 
@@ -97,6 +99,8 @@ type Provider interface {
     Chat(ctx context.Context, system string, msgs []Message, tools []ToolDef, onText func(string)) (Message, error)
 }
 ```
+
+Together, your two calls were one **turn**: one user message, handled until the final answer. (The [glossary](../docs/glossary.md) keeps *model call*, *iteration*, *turn* and *run* apart.)
 
 > **Misconception:** "The model ran the `date` command." It didn't. It asked for it. *You* ran it, and in a real agent the harness does.
 
@@ -108,9 +112,9 @@ Open `$WS/plain-harness/src/openai.go` and find the functions `messages` and `to
 
 For each change, **predict first**, then send it:
 
-1. Remove the `tools` array from `turn1.json`. What does the model answer, and is the answer right?
-2. In `turn2.json`, replace the tool result with a wrong time (`2020-01-01T03:00:00+09:00`). What does the model say?
-3. Send `turn2.json` with a wrong `tool_call_id`. What happens? (llama-server accepts it silently; the OpenAI and Anthropic APIs reject it.) Imagine a reply with two tool calls: why would a strict API insist that the ids match, and what could go wrong with a server that doesn't check?
+1. Remove the `tools` array from `call1.json`. What does the model answer, and is the answer right?
+2. In `call2.json`, replace the tool result with a wrong time (`2020-01-01T03:00:00+09:00`). What does the model say?
+3. Send `call2.json` with a wrong `tool_call_id`. What happens? (llama-server accepts it silently; the OpenAI and Anthropic APIs reject it.) Imagine a reply with two tool calls: why would a strict API insist that the ids match, and what could go wrong with a server that doesn't check?
 
 ## Check
 

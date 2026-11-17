@@ -9,7 +9,7 @@ You may (and should) use an AI coding assistant for this lab. You are graded on 
 
 ## Warm-up (from memory)
 
-1. Name the five steps of the agent loop. (Lab 2)
+1. Describe the agent loop, step by step. (Lab 2)
 2. Why does a sub-agent need self-contained questions? (Lab 6)
 3. Why must a run never fetch from git? (Lab 8)
 
@@ -29,11 +29,13 @@ The quality of AI-generated code follows the quality of the spec. "Add sessions"
 
 You are still responsible for the result. You must be able to read, test and explain every line you commit.
 
+> **Misconception:** "The tests pass, so the AI's code is right." Tests that the AI wrote check what the AI understood, not what your spec says.
+
 ## Choose a feature
 
 | Level | Feature | The hard part |
 | --- | --- | --- |
-| A | **Timing log:** log how long each model turn and each tool call takes, to stderr. | where to measure; leaving stdout unchanged; testing log output |
+| A | **Timing log:** log how long each model call and each tool call takes, to stderr. | where to measure; leaving stdout unchanged; testing log output |
 | B | **Tool filter:** an optional `tools:` list per MCP server (`allow: [date]`), so only some of a server's tools are offered to the model. | config validation (an unknown tool name in `allow` is a startup error); filtering by the name before or after adding the `<server>__` prefix |
 | C | **History limit:** an optional `max_history_messages`. Before each model call, drop the oldest messages so the history fits. | an assistant message with tool calls must never be split from its tool results; the first message must stay a user message. The OpenAI and Anthropic APIs reject a broken history, but llama-server accepts it silently, so with a local model only your tests will catch the bug |
 

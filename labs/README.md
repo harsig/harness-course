@@ -9,8 +9,10 @@ Every lab has the same rhythm. Once you know it, you can spend your attention on
 | **Run** | Run the given commands. Compare with your prediction. | You see the real system before you see any explanation. |
 | **Investigate** | Find the lines of code or config that caused what you saw. | You trace an effect back to its cause. |
 | **The idea** | A short explanation of the mechanism, *after* you have seen it. | An explanation sticks when you have a question it answers. |
-| **Modify / Make** | Change the system, then build something of your own. | Help is reduced step by step until you work on your own. |
+| **Modify / Make** | Change the system. In Labs 3, 4, 5, 8 and 9 you then build something of your own. | Help is reduced step by step until you work on your own. |
 | **Check** | Explain the mechanism in your own words, without notes. | If you can't explain it, you haven't got it yet. Better to find that out now than in the exam. |
+
+Two labs differ a little: Lab 0 starts with a drawing instead of a warm-up, and Lab 9 is a project that starts from the idea.
 
 ## The context ledger
 
@@ -33,6 +35,7 @@ Everything the model "knows" in that call is in this box, and nothing else is. M
 ## Rules
 
 - **Predict on paper first.** Predictions are only useful if you write them down *before* you run the command.
+- **Say your prediction out loud.** If someone works next to you, tell each other your prediction and your reason before you run the command. Explaining it to another person is part of the method, not a detour.
 - **Keep a lab log.** For each lab, write down your predictions, the commands you ran (outputs shortened) and your answers. Use the template below.
 - **One run proves little.** Models are not deterministic. When a lab asks "does X happen?", run it several times and report how often, e.g. "4 of 5".
 - **Work on a branch or a copy.** Many labs change prompts or configs. `git stash` or `git restore .` takes you back.

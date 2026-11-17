@@ -7,7 +7,7 @@
 
 ## Warm-up (from memory)
 
-1. In Lab 1, why did the model receive your question a second time in turn 2?
+1. In Lab 1, why did the model receive your question a second time in the second call?
 2. Who runs a tool: the model or the harness?
 3. Why must a tool result carry the `tool_call_id` of its call?
 

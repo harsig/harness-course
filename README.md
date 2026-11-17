@@ -20,7 +20,7 @@ The answer is **5 minutes ahead** of the real time in Tokyo. When you can explai
 
 ## How you will learn
 
-Each lab follows the same rhythm: **recall** earlier labs from memory, **predict** what will happen, **run** it, **investigate** the code that caused it, and only then read **the idea** behind it. After that you change the system, then build your own. One simple picture runs through every lab: the *context ledger*, which shows exactly what the model receives in one call. This design follows research on how people learn to program; [docs/instructors.md](docs/instructors.md#how-the-course-teaches-and-why) explains the reasons and sources.
+Each lab follows the same rhythm: **recall** earlier labs from memory, **predict** what will happen, **run** it, **investigate** the code that caused it, and only then read **the idea** behind it. After that you change the system, then build your own. One simple picture runs through the course: the *context ledger*, which shows exactly what the model receives in one call. This design follows research on how people learn to program; [docs/instructors.md](docs/instructors.md#how-the-course-teaches-and-why) explains the reasons and sources.
 
 Start with [How the labs work](labs/README.md) (5 minutes).
 
@@ -32,11 +32,11 @@ Start with [How the labs work](labs/README.md) (5 minutes).
 | [1 Be the harness](labs/01-be-the-harness.md) | run one agent turn by hand with `curl`: *you* are the harness | 60 min |
 | [2 The loop](labs/02-the-loop.md) | read the 20-line agent loop, break it at each limit, watch the history grow | 60 min |
 | [3 MCP by hand](labs/03-mcp-by-hand.md) | talk JSON-RPC to a tool server from the shell | 45 min |
-| [4 Write a tool](labs/04-write-a-tool.md) | build a tool and your own agent; measure how descriptions steer the model | 90 min |
-| [5 Measure the skill](labs/05-measure-the-skill.md) | run a small eval: how often is an instruction actually followed? | 90 min |
+| [4 Write a tool](labs/04-write-a-tool.md) | build a tool and your own agent; measure how descriptions steer the model; design a tool of your own | 120 min |
+| [5 Measure the skill](labs/05-measure-the-skill.md) | run a small eval: how often is an instruction actually followed? Then write and measure your own skill | 120 min |
 | [6 Sub-agents](labs/06-sub-agents.md) | trace context across two agents; redraw your Lab 0 model | 60 min |
 | [7 Untrusted output](labs/07-untrusted-output.md) | trigger prompt injection; tell real boundaries from rules | 60 min |
-| [8 Pin and set up](labs/08-reproducibility.md) | pinned versions, setup vs. run, strict config | 45 min |
+| [8 Pin and set up](labs/08-reproducibility.md) | pinned versions, setup vs. run, strict config; pin your own agent | 60 min |
 | [9 Build with AI](labs/09-spec-driven-feature.md) | extend the harness with an AI assistant, spec first | 2–4 h |
 
 Reference: [the mental model on one page](docs/concepts.md) (for review), [architecture](docs/architecture.md), [glossary](docs/glossary.md).

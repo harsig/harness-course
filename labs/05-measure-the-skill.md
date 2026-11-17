@@ -2,8 +2,8 @@
 
 | | |
 | --- | --- |
-| **You will be able to** | explain how skills are loaded on demand, and measure whether an agent follows an instruction instead of trusting an impression |
-| **Time** | 90 min |
+| **You will be able to** | explain how skills are loaded on demand, and measure whether an agent follows an instruction instead of trusting an impression; write a skill of your own and test it |
+| **Time** | 120 min |
 
 ## Warm-up (from memory)
 
@@ -40,7 +40,9 @@ loaded when needed:  the full rules, examples and edge cases (midnight rollover,
 
 This is **progressive disclosure**: every skill costs context for its description, but only a skill that is used costs context for its full text. You can't put 50 skills into the system prompt, but you can put 50 one-line descriptions there.
 
-The price: **loading depends on the model's judgment.** If the description doesn't match the situation, or the model doesn't bother, the skill is never read. That's why `date-output` makes the agent do something visibly wrong: it adds 5 minutes. It is a **canary**: from any answer, you can tell whether the skill was loaded and followed.
+The price: **loading depends on the model's judgment.** If the description doesn't match the situation, or the model doesn't bother, the skill is never read. That's why `date-output` makes the agent do something visibly wrong: it adds 5 minutes. It is a **canary**: from any answer, you can tell whether the rule was applied. Whether the skill was *loaded* is a second question, and the harness log answers it (step 2).
+
+> **Misconception:** "A skill that is loaded is followed." Loading and following are separate steps, and both can fail. Your table in step 4 shows how often.
 
 **State of the art.** Claude Code and other agents now load skills natively from the same kind of `SKILL.md` file: the name and description from the frontmatter are always in the context, and the body is read on demand. `skills-mcp` builds this mechanism over MCP, so you can see it work in any MCP client.
 
@@ -81,7 +83,7 @@ Run each condition 10 times (better: 20). Restore everything between conditions.
 | # | Change | Question |
 | --- | --- | --- |
 | C1 | none | baseline |
-| C2 | in `AGENT.md`, delete rule 1 ("Load the output rules first") and the `date-output` line under *Tools* | is the skill's description alone enough to get it loaded? |
+| C2 | remove every mention of the skill from `AGENT.md`: rule 1 ("Load the output rules first") and the `date-output` line under *Tools*. This is one change: the prompt no longer names the skill | is the skill's description alone enough to get it loaded? |
 | C3 | as C2, and shorten the skill's `description:` to `Output formatting.` | how much does the description matter? |
 | C4 | as C2, and start the description with `ALWAYS call this before stating any time.` | can a description force loading? |
 | C5 | baseline, but delete "Faithful to your rules" from `SOUL.md` | does the soul affect whether rules are followed? |
@@ -94,7 +96,19 @@ For each condition, also look at one full run to see *why*: run the harness once
 
 Make a table: condition × (shifted, plain, other) × (loaded, not loaded). How large must a difference be before you trust it? A rough rule: with 10 runs per condition, 7 out of 10 vs. 4 out of 10 is *not* a clear difference. With 20 runs each, 15 vs. 7 is. To get more data, pool your results with the whole group.
 
+You also compare four conditions with the baseline. The more comparisons you make, the more likely it is that one of them looks clear by chance alone. Decide *before* you run which comparison matters most to you, and treat the others as hints that need a second test.
+
 This is a tiny **eval**: a fixed task, a measurable signal, repeated runs, conditions compared. Teams that build agents work this way, with hundreds of tasks instead of one.
+
+## 5. Make: your own skill, with your own canary
+
+Write a skill for your agent from Lab 4 (`~/my-agent`).
+
+1. Create `~/my-agent/skills/<name>/SKILL.md` with `name` and `description` in the frontmatter. The body holds real rules for one kind of task of your agent (for example, how to present a list of commits), plus **one canary**: a harmless rule whose effect you can find in the answer with `grep`.
+2. Keep the canary out of the description. Then *loaded* and *followed* stay two separate measurements.
+3. Add a `skills-mcp.yml` with your skill folder as a `path` source, and a second server in `plain-harness.yml` that runs `skills-mcp` with it. `sub-agent/plain-harness.yml` shows the pattern.
+4. Decide whether your `AGENT.md` should name the skill, and write down why.
+5. Measure 10 runs of one fitting question: how often was the skill loaded (`tool call:` line in stderr), and how often does the canary show in the answer?
 
 ## Check
 
@@ -103,6 +117,7 @@ This is a tiny **eval**: a fixed task, a measurable signal, repeated runs, condi
 3. Did you see runs that were *loaded* but not *shifted*, or *shifted* but not *loaded*? What does each tell you about "loaded" vs. "followed"?
 4. Why is a deliberately wrong behavior (+5 minutes) a better test signal than a realistic rule like "always use ISO 8601"?
 5. What would you need to change to publish these results? (Think of sample size, model version, temperature, prompt wording.)
+6. For your own skill: show the description, your two counts, and one change that would raise the lower of the two.
 
 ## In your daily work
 
