@@ -54,8 +54,9 @@ Make each of these mistakes, one at a time, in a copy of `sub-agent/plain-harnes
 2. `api_key: "${NOT_SET_ANYWHERE}"` in the `model` block
 3. a duplicate MCP server name
 4. `provider: openai` (not a valid value)
+5. a wrong port in `endpoint:`, e.g. `http://localhost:9/v1`
 
-> **Predict** for each mistake: does it fail before or after the first model call?
+> **Predict** for each mistake: does it fail before or at the first model call? How long does it take to fail?
 
 Record each error message.
 
@@ -71,7 +72,7 @@ Three times, three kinds of connection. Mixing them up is the most common source
 
 - **Only setup touches the network for git.** A normal run uses the local clones, and fails with a hint if one is missing. The same config therefore gives the same tools, prompts and scripts every time.
 - **The clone folder name contains a hash of URL and `ref`.** Changing a `ref` makes the old clone invalid, so you can't run against an outdated version by accident.
-- **Unknown keys are errors** (`harness-kit/yamlconfig`), in all three tools. A typo shows up at startup, not weeks later.
+- **Unknown keys are errors** (`harness-kit/yamlconfig`), in all three tools. A typo shows up at startup, not weeks later. What a config check can't see (mistake 5: is a server really listening there?) only shows up at run time, after the retries.
 
 ## Check
 

@@ -25,7 +25,7 @@ When you ask the sub-agent "What time is it in Tokyo?", how many times is the mo
 
 ## 2. Investigate: read the loop
 
-Open `$WS/plain-harness/src/agent.go` (79 lines) and `types.go` (39 lines). Here is the core of `Agent.Run`, shortened slightly:
+Open `$WS/plain-harness/src/agent.go` (about 80 lines) and `types.go` (about 40 lines). Here is the core of `Agent.Run`, shortened slightly:
 
 ```go
 history = append(history, Message{Role: roleUser, Text: prompt})
@@ -70,7 +70,7 @@ Now ask the **main** agent the same question. The sub-agent fails inside it. Wha
 
 > **Predict:** What is the smallest `max_iterations` that works? Then try 2 and 3.
 
-Look at the stderr lines for `max_iterations: 1`: both tools were called, but the run still failed. One model reply can ask for **several tools at once**, and one iteration runs all of them. Use this to explain the smallest value that works.
+Look at the stderr lines for `max_iterations: 1`: how many `tool call:` lines are there? One model reply can ask for **several tools at once**, and one iteration runs all of them. Some models ask for the skill and the date in one reply (two model calls in total), others ask for them one after the other (three model calls, as drawn in [architecture.md](../docs/architecture.md#message-flow)). Use what *your* model did to explain the smallest value that works, and write the number of model calls into your log: later labs refer to it.
 
 Restore the file: `git restore sub-agent/plain-harness.yml`.
 
@@ -97,7 +97,7 @@ Did the *tool* fail? Did the *run* fail? What did the model do with the error te
 | Failure | Handling | Why |
 | --- | --- | --- |
 | tool fails (bad args, exit code ≠ 0, timeout) | sent to the model as an error result (`callTool`) | the model can often fix it |
-| network error, timeout, HTTP 429, 5xx | retried up to 3 times, honoring `Retry-After` (max 30 s) | the error is temporary, so retrying is safe |
+| network error, timeout, HTTP 429, 5xx | up to 3 attempts in total (2 retries), honoring `Retry-After` (max 30 s) | the error is temporary, so retrying is safe |
 | retry after text was already streamed | not retried | the user would see the text twice |
 | no final answer after `max_iterations` | the run ends with an error | protects against endless loops |
 | bad config | exit 1 at startup, before any model call | fail early, fail cheap |
@@ -125,7 +125,7 @@ With `--session demo`, the harness saves the history to `sessions/demo.json` and
 - **saved even on error**: a failed run can be continued
 - **no compaction** (out of scope in `spec.md`): the session grows until it no longer fits the model's context window, and then the run fails
 
-**What production harnesses add.** Commercial agents deal with this growth in three ways. **Compaction** summarizes or drops old turns when the context fills up. **Prompt caching** lets the provider reuse the unchanged start of the request, so resending it costs less and goes faster. But it is still sent, and it still takes up the context window. **Parallel execution** runs the several tool calls of one reply at the same time. `plain-harness` accepts several calls per reply but runs them one after another, and it leaves out compaction and caching, so you can see the plain mechanism.
+**What production harnesses add.** Commercial agents deal with this growth in three ways. **Compaction** summarizes or drops old turns when the context fills up. **Prompt caching** lets the provider reuse the unchanged start of the request, so resending it costs less and goes faster. But it is still sent, and it still takes up the context window. **Parallel execution** runs the several tool calls of one reply at the same time. `plain-harness` accepts several calls per reply but runs them one after another, and it leaves out compaction, so you can see the plain mechanism. Caching it does use, because it costs almost no code: with an Anthropic-format API it sets one `cache_control` field (`anthropic.go`), and OpenAI-compatible servers such as llama-server cache the unchanged start of a request on their own.
 
 ## Check
 

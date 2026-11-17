@@ -80,7 +80,7 @@ Why this works for teaching:
 
 - **Glass box, not black box.** Each mechanism lives in one small, named place. Students can point at the line a behavior comes from.
 - **One mechanism per repository.** The harness knows nothing about dates, the tool server knows nothing about models, and the skill is plain markdown.
-- **A visible canary.** The `date-output` skill tells the agent to add 5 minutes to every time. That is wrong on purpose: any answer shows whether the skill was loaded, so "did it follow its instructions?" becomes something you can measure.
+- **A visible canary.** The `date-output` skill tells the agent to add 5 minutes to every time. That is wrong on purpose: any answer shows whether the rule was applied, so "did it follow its instructions?" becomes something you can measure.
 - **Spec-driven.** Each tool repository has a `spec.md` that describes its behavior completely, which is the way of working that pays off most when you code with AI.
 
 ## Quick start
@@ -93,7 +93,15 @@ The repositories must sit next to each other:
   scripts/          scripts-mcp/   skills/          skills-mcp/
 ```
 
-You need Go, git, GNU `date`, and an OpenAI-compatible model server at `http://localhost:8080/v1`, for example [llama.cpp](https://github.com/ggml-org/llama.cpp)'s `llama-server` ([llama.cpp-compose](https://github.com/harsig/llama.cpp-compose) runs the model the configs expect in Docker). [Lab 0](labs/00-setup.md) covers hosted APIs as well.
+Clone them all into one folder:
+
+```sh
+for r in harness-course harness-kit plain-harness plain-harness-config scripts scripts-mcp skills skills-mcp; do
+  git clone https://github.com/harsig/$r
+done
+```
+
+You need Go 1.26.3 or newer, git, GNU `date` (on macOS: `brew install coreutils` and put its `gnubin` folder first in your `PATH`), and an OpenAI-compatible model server at `http://localhost:8080/v1`, for example [llama.cpp](https://github.com/ggml-org/llama.cpp)'s `llama-server` ([llama.cpp-compose](https://github.com/harsig/llama.cpp-compose) runs the model the configs expect in Docker). [Lab 0](labs/00-setup.md) covers hosted APIs as well.
 
 ```sh
 (cd plain-harness && ./build.sh)

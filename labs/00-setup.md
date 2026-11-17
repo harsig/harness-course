@@ -11,6 +11,19 @@ On paper, draw how you think an AI coding assistant answers **"What time is it i
 
 There is no wrong drawing. Keep it. You will draw it again in Lab 6 and compare the two. The difference between them shows what you learned.
 
+## 0. Tools and repositories
+
+You need git, Go 1.26.3 or newer, `curl`, `jq` and GNU `date`. On macOS, `date` is the BSD version, and `date.sh` and the measuring scripts fail with it: run `brew install coreutils` and put its `gnubin` folder first in your `PATH`. On Windows, use WSL.
+
+Clone the repositories next to each other, and set `$WS` to that folder (see [How the labs work](README.md#rules)):
+
+```sh
+mkdir -p $WS && cd $WS
+for r in harness-course harness-kit plain-harness plain-harness-config scripts scripts-mcp skills skills-mcp; do
+  git clone https://github.com/harsig/$r
+done
+```
+
 ## 1. A model server
 
 The configs expect an OpenAI-compatible API at `http://localhost:8080/v1`. Pick one:
@@ -23,7 +36,7 @@ llama-server -m <model>.gguf --jinja --port 8080
 
 `--jinja` turns on the model's chat template, which tool calling needs. Larger models use tools more reliably. With models under about 8B parameters, expect failures: they are interesting to watch, but frustrating as a first experience.
 
-**Local with Docker (Linux with a GPU).** [llama.cpp-compose](https://github.com/harsig/llama.cpp-compose) starts `llama-server` with the model the configs ask for (`Qwen3.8-27B-S`) and a pinned llama.cpp build, so your results are comparable with everyone else's. It needs about 16 GB of VRAM. It doesn't work on macOS, because Docker there can't use the Apple Silicon GPU; use the command above instead.
+**Local with Docker (Linux with a GPU).** [llama.cpp-compose](https://github.com/harsig/llama.cpp-compose) starts `llama-server` with the model the configs ask for (`Qwen3.8-27B-S`) and the same quantization and server settings for everyone, so your results are comparable. The llama.cpp build itself is *not* pinned: the compose file pulls the latest image on every start, so write the build (first lines of `docker compose logs`) into your lab log. It needs about 16 GB of VRAM. It doesn't work on macOS, because Docker there can't use the Apple Silicon GPU; use the command above instead.
 
 ```sh
 git clone https://github.com/harsig/llama.cpp-compose
@@ -44,6 +57,16 @@ model:
 ```
 
 `${ANTHROPIC_API_KEY}` is read from your environment, so the key is never written into the file. If the variable isn't set, the harness refuses to start.
+
+If you change the `model:` block, **commit the change on a local branch** right away:
+
+```sh
+cd $WS/plain-harness-config && git switch -c my-model && git commit -am "chore: use my model"
+```
+
+Later labs undo their experiments with `git restore`, which goes back to the last commit. Without this commit, it would also undo your model settings.
+
+Lab 1 talks to the model API by hand, in the OpenAI format. With a hosted OpenAI-compatible API it works with small changes. With an Anthropic-format API it doesn't, so use a local model for Lab 1.
 
 ## 2. Build and set up
 

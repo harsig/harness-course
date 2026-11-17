@@ -46,11 +46,17 @@ The price: **loading depends on the model's judgment.** If the description doesn
 
 ## 2. The measuring tool
 
-`labs/tools/measure-skill.sh` asks for the current UTC time N times and sorts each answer:
+`labs/tools/measure-skill.sh` asks for the current UTC time N times and records two things per run.
 
-- 3–6 minutes ahead: **shifted** (the skill was loaded and followed)
-- the real time: **plain** (the skill was not loaded, or not followed)
+Was the answer shifted?
+
+- 3–6 minutes ahead: **shifted** (the +5 rule was applied)
+- the real time: **plain** (the rule was not applied)
 - anything else: **other**
+
+Was the skill loaded? The script looks for `tool call: skills-mcp__date-output` in the harness log and marks the run **loaded** or **not loaded**.
+
+These are two separate questions. The skill's *description* is always in the context, and it already says "Always add 5 minutes". So a model can shift the time **without** loading the skill, and it can load the skill and still not shift. The summary line counts all four combinations.
 
 ```sh
 cd $WS/plain-harness-config/sub-agent
@@ -80,21 +86,21 @@ Run each condition 10 times (better: 20). Restore everything between conditions.
 | C4 | as C2, and start the description with `ALWAYS call this before stating any time.` | can a description force loading? |
 | C5 | baseline, but delete "Faithful to your rules" from `SOUL.md` | does the soul affect whether rules are followed? |
 
-> **Predict before you run anything:** write down the expected *shifted* count out of 10 for each condition.
+> **Predict before you run anything:** write down the expected *shifted* count and the expected *loaded* count out of 10 for each condition.
 
-For each condition, also look at one full run to see *why*: run it once without `2>/dev/null` and check whether `tool call: skills-mcp__date-output` appears.
+For each condition, also look at one full run to see *why*: run the harness once by hand and read its stderr lines.
 
 ## 4. Analyze
 
-Make a table: condition × (shifted, plain, other). How large must a difference be before you trust it? A rough rule: with 10 runs per condition, 7 out of 10 vs. 4 out of 10 is *not* a clear difference. With 20 runs each, 15 vs. 7 is. To get more data, pool your results with the whole group.
+Make a table: condition × (shifted, plain, other) × (loaded, not loaded). How large must a difference be before you trust it? A rough rule: with 10 runs per condition, 7 out of 10 vs. 4 out of 10 is *not* a clear difference. With 20 runs each, 15 vs. 7 is. To get more data, pool your results with the whole group.
 
 This is a tiny **eval**: a fixed task, a measurable signal, repeated runs, conditions compared. Teams that build agents work this way, with hundreds of tasks instead of one.
 
 ## Check
 
 1. Which condition had the largest effect? Was it the one you predicted?
-2. Explain the C2 result with the ledger: what did the model see, and what didn't it see? (Strong models often load the skill in C2 anyway, because its description already says "Always add 5 minutes". If C1 and C2 look the same, which words in the description did the work? C3 tests exactly that.)
-3. Did you see runs where the skill was loaded (a `tool call` in the log) but the time was *not* shifted? What does that tell you about "loaded" vs. "followed"?
+2. Explain the C2 result with the ledger: what did the model see, and what didn't it see? (In C2, look at the *shifted, not loaded* count: the description alone already says "Always add 5 minutes". If C1 and C2 look the same, which words in the description did the work? C3 tests exactly that.)
+3. Did you see runs that were *loaded* but not *shifted*, or *shifted* but not *loaded*? What does each tell you about "loaded" vs. "followed"?
 4. Why is a deliberately wrong behavior (+5 minutes) a better test signal than a realistic rule like "always use ISO 8601"?
 5. What would you need to change to publish these results? (Think of sample size, model version, temperature, prompt wording.)
 

@@ -55,6 +55,8 @@ curl -s http://localhost:8080/v1/chat/completions -H 'Content-Type: application/
   -d @turn1.json | jq '.choices[0].message'
 ```
 
+(Hosted OpenAI-compatible API: use your provider's URL and add `-H "Authorization: Bearer $YOUR_API_KEY"`. The Anthropic API uses a different request format; see the note in Lab 0.)
+
 You get an assistant message with **no answer** and a `tool_calls` entry, something like `{"name": "date", "arguments": "{\"timezone\":\"Asia/Tokyo\"}"}`. Look closely: `arguments` is a *string* that contains JSON. The model wrote it as text, so nothing guarantees that it is valid.
 
 ## 2. Run the tool yourself

@@ -7,7 +7,7 @@
 | **Canary** | A deliberately unusual, easy-to-spot behavior that shows whether an instruction was read and followed. | the +5 minutes of the `date-output` skill |
 | **Context (window)** | All text sent to the model in one call, and the maximum amount the model can take. | system prompt + session history + tool definitions |
 | **Context compaction** | Shortening an old history (dropping or summarizing) so it fits the context window. | out of scope in `plain-harness`; Lab 2, Lab 9 level C |
-| **Context ledger** | The course's drawing of what the model receives in one call: system prompt, tool definitions, messages. | introduced in Lab 1, used in every lab |
+| **Context ledger** | The course's drawing of what the model receives in one call: system prompt, tool definitions, messages. | introduced in Lab 1, drawn in Labs 1, 2, 5, 6, 7 and 9 |
 | **Conventional Commits** | Commit message format (`feat:`, `fix:`, `docs:`) from which tooling derives version numbers. | `semantic-release` in each repository's workflow |
 | **Eval** | A repeatable measurement of agent behavior: fixed tasks, a measurable signal, many runs, conditions compared. | `labs/tools/measure-skill.sh`, Lab 5 |
 | **Harness** | The program around a model: prompts, tools, loop, history, errors, limits. | `plain-harness` |
@@ -17,7 +17,7 @@
 | **MCP server** | A program that offers tools (and possibly other things) over MCP. | `scripts-mcp`, `skills-mcp` |
 | **MCP** (Model Context Protocol) | An open protocol for clients (harnesses) to discover and call tools in servers. | `scripts-mcp`, `skills-mcp`; client in `plain-harness/src/mcp.go` |
 | **Progressive disclosure** | Show only short descriptions up front and load the full content on demand. | skills: description always, `SKILL.md` on call |
-| **Prompt caching** | The provider reuses the unchanged start of a request, so resending a long history costs less and is faster. It still fills the context window. | not used by `plain-harness`; Lab 2 |
+| **Prompt caching** | The provider reuses the unchanged start of a request, so resending a long history costs less and is faster. It still fills the context window. | `cache_control` in `plain-harness/src/anthropic.go`; OpenAI-compatible servers cache on their own; Lab 2 |
 | **Prompt injection** | Text in model input (often from a tool result) that tries to override the actual instructions. | Lab 7 |
 | **Provider** | A model API family with its own wire format. | `openai_compatible`, `anthropic_compatible` |
 | **Ref** | A git tag, branch or commit that pins which version of a source is used. | `ref: v1.0.0` in the configs |

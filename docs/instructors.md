@@ -58,7 +58,7 @@ The design follows a small set of principles with strong evidence from cognitive
 
 **Block week** (5 days): one day each for Labs 0–2, 3–4, 5–6, 7–8, and 9 with presentations. Start each day with a 10-minute mixed quiz on the days before.
 
-**Single workshop** (3 hours): Lab 0 prepared in advance, Lab 1, then Lab 5 with conditions C1 and C2 only. These show the two key ideas: the loop is simple, and instructions are followed only with some probability.
+**Single workshop** (3 hours): Lab 0 prepared in advance, Lab 1, then Lab 5 with conditions C1 and C3 only (with strong models, C1 and C2 often look the same). These show the two key ideas: the loop is simple, and instructions are followed only with some probability.
 
 ## Assessment
 
@@ -87,10 +87,11 @@ Rubric for Lab 9:
 ## Practical notes
 
 - **Hardware.** A local model with reliable tool calling needs a recent GPU or an Apple Silicon machine with enough memory. Alternatives: a shared lab server running `llama-server`, or a hosted API with a course budget. Small local models (under about 8B parameters) work for Labs 1 and 3, but make Labs 4–6 noisy.
-- **Reference model server.** [llama.cpp-compose](https://github.com/harsig/llama.cpp-compose) runs `llama-server` in Docker (AMD or NVIDIA, Linux) with the model the configs expect and a pinned llama.cpp build. Use it for a shared lab server or for students' own machines: everyone gets the same model, quantization and server version, so Lab 5 results can be pooled.
+- **Reference model server.** [llama.cpp-compose](https://github.com/harsig/llama.cpp-compose) runs `llama-server` in Docker (AMD or NVIDIA, Linux) with the model the configs expect. Use it for a shared lab server or for students' own machines: everyone gets the same model, quantization and server settings. The llama.cpp image is not pinned (the compose file pulls the latest build on every start), so before results are pooled for Lab 5, pin the image to one tag or digest for the whole course, or have students record the build.
 - **Shared model server.** With one shared server, runs queue up. Spread Lab 5 out, or use fewer repetitions per student and pool the results.
 - **Prepare Lab 0 in advance.** Building, `--setup` and the model connection are where time is lost. A pre-built VM or container image saves the first session.
 - **Nondeterminism is part of the content.** Students will get different results from each other. Collect the whole group's Lab 5 results and analyze them together: that gives a sample size no single student has.
+- **Repository versions.** Students clone the `main` branch of each repository. For a course run, note the commit of each one (or have everyone check out the same tags), so file and line references in the labs match what students see.
 - **Model versions.** Have students write the exact model and quantization into every log. Results from one model don't carry over to another, and seeing that is itself a learning outcome.
 
 ## Discussion questions

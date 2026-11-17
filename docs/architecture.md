@@ -136,7 +136,7 @@ sequenceDiagram
     H1-->>U: "It's 06:15 in Tokyo."
 ```
 
-Count the model calls: **five** for one question (two in the main agent, three in the sub-agent). Each one sends the full history of its agent again. This is why agents are slower and more expensive than a single chat completion, and why the sub-agent's context staying small matters.
+Count the model calls: **five** for one question (two in the main agent, three in the sub-agent). A model that asks for the skill and the date in one reply needs only two calls in the sub-agent, so four in total; Lab 2 shows which case you have. Each one sends the full history of its agent again. This is why agents are slower and more expensive than a single chat completion, and why the sub-agent's context staying small matters.
 
 ### What each component knows
 
